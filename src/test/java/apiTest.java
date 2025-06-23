@@ -20,5 +20,19 @@ public class apiTest extends Base {
         Assert.assertEquals(postAPITest().statusCode(), 201);
     }
 
+    @Test
+    public void postTestWithData() {
+        Assert.assertEquals(postAPIWithPayloadTest().statusCode(), 201);
+    }
+
+    @Test
+    public void postWithTakingData() {
+        String key = "page";
+        String value = readJson(getAPITest(),key);
+        storeObject(key,value);
+        postAPIWithPayloadTest();
+
+    }
+
 
 }

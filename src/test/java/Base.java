@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Base {
 
+    HashMap <String, String > storeData;
 //    Response response =null;
     public Response getAPITest() {
         Map<String,String > header = new HashMap<>();
@@ -25,6 +26,24 @@ public class Base {
         JsonObject jsonObject = new Gson().fromJson(response.asString(),JsonObject.class);
         return jsonObject.get(key).toString();
     }
+//    public String writePayload () {
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty("name", "morpheus");
+//        jsonObject.addProperty("job", "job");
+//        return jsonObject.toString();
+//    }
+
+    public String writePayload () {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", "morpheus");
+        jsonObject.addProperty("job", "job");
+        if(storeData != null) {
+            for (Map.Entry<String, String> each : storeData.entrySet()) {
+                jsonObject.addProperty(each.getKey(), each.getValue());
+            }
+        }
+        return jsonObject.toString();
+    }
 
 
     public Response postAPITest() {
@@ -36,5 +55,19 @@ public class Base {
                 "}").post("https://reqres.in/api/users");
         System.out.println(response.asString());
         return response;
+    }
+
+    public Response postAPIWithPayloadTest() {
+        Map<String,String > header = new HashMap<>();
+        header.put("x-api-key", "reqres-free-v1");
+        System.out.println(writePayload ());
+        Response response = RestAssured.given().headers(header).body(writePayload ()).post("https://reqres.in/api/users");
+        System.out.println(response.asString());
+        return response;
+    }
+
+    public void storeObject(String key, String value) {
+        storeData = new HashMap<>();
+        storeData.put(key, value);
     }
 }
